@@ -25,8 +25,9 @@ app.post('/', async (req, res) => {
             email,
             address
         }
-    })
-})
+    });
+});
+// working on server.ts
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
