@@ -3,8 +3,8 @@ import config from "./config/config";
 import initDB from "./database/database";
 import pool from "./app";
 
-const app: Application = express()
-const port = config.port
+const app: Application = express();
+const port = config.port;
 
 app.use(express.json());
 app.use(express.text());
@@ -12,7 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 
 initDB();
 
-app.get('/', (req, res) => {
+// get main server
+app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
         success: true,
         sever: "Assignment Server Running",
@@ -21,7 +22,28 @@ app.get('/', (req, res) => {
     });
 });
 
-app.post('/', async (req: Request, res: Response) => {
+// get all users using GET method
+app.get('/api/users', async (req: Request, res: Response) => {
+    try {
+        const result = await pool.query(`
+           SELECT id,name,email,role,created_at,updated_at FROM users
+            `);
+        res.status(200).json({
+            success: true,
+            message: "Users retrieved successfully",
+            data: result.rows
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    };
+});
+
+// create single user using POST method
+app.post('/api/users', async (req: Request, res: Response) => {
     const body = req.body
     const { name, email, password, role = 'contributor' } = body
     try {
@@ -42,13 +64,13 @@ app.post('/', async (req: Request, res: Response) => {
                 errors: "Email is already registered"
             });
             return;
-        }
+        };
         res.status(500).json({
             success: false,
             message: "Internal Server Error",
             errors: error.message
         });
-    }
+    };
 })
 
 app.listen(port, () => {
