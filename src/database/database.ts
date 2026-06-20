@@ -13,7 +13,7 @@ const initDB = async () => {
         id SERIAL PRIMARY KEY,
         name VARCHAR(20) NOT NULL,
         email VARCHAR(50) UNIQUE NOT NULL,
-        password VARCHAR(20) NOT NULL,
+        password TEXT NOT NULL,
         role VARCHAR(20) DEFAULT 'contributor' CHECK (role IN ('contributor', 'maintainer')),
 
         created_at TIMESTAMP DEFAULT NOW(),
@@ -36,7 +36,7 @@ const initDB = async () => {
             `)
         console.log("Database Created Successfully");
     } catch (error: any) {
-        console.error("❌ Database initialization failed:");
+        console.error("Database initialization failed:");
         console.error(error.message);
     };
 };

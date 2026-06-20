@@ -12,6 +12,8 @@ app.use('/api/users', userRoute);
 
 initDB();
 
+// =======User Table IN Database==========
+
 // get all users using GET method
 // app.get('/api/users', async (req: Request, res: Response) => {
 //     try {
@@ -165,6 +167,10 @@ initDB();
 //         });
 //     };
 // })
+
+// ==========Issues Table IN Database==========
+
+
 
 // get main server
 app.get('/', (req: Request, res: Response) => {
