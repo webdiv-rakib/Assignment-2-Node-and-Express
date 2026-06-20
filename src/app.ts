@@ -1,11 +1,9 @@
 import express, { type Application, type Request, type Response } from "express"
-import config from "./config/config";
 import initDB, { pool } from "./database/database";
 import { userRoute } from "./modules/user/user.route";
 
 const app: Application = express();
-const port = config.port;
-
+// middleware
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
@@ -15,24 +13,24 @@ app.use('/api/users', userRoute);
 initDB();
 
 // get all users using GET method
-app.get('/api/users', async (req: Request, res: Response) => {
-    try {
-        const result = await pool.query(`
-           SELECT id,name,email,role,created_at,updated_at FROM users
-            `);
-        res.status(200).json({
-            success: true,
-            message: "Users retrieved successfully",
-            data: result.rows
-        });
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-            errors: error.message
-        });
-    };
-});
+// app.get('/api/users', async (req: Request, res: Response) => {
+//     try {
+//         const result = await pool.query(`
+//            SELECT id,name,email,role,created_at,updated_at FROM users
+//             `);
+//         res.status(200).json({
+//             success: true,
+//             message: "Users retrieved successfully",
+//             data: result.rows
+//         });
+//     } catch (error: any) {
+//         res.status(500).json({
+//             success: false,
+//             message: "Internal Server Error",
+//             errors: error.message
+//         });
+//     };
+// });
 
 // get single user using GET method
 app.get('/api/users/:id', async (req: Request, res: Response) => {

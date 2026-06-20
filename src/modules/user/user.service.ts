@@ -7,6 +7,14 @@ const createUserIntoDB = async (payload: any) => {
          RETURNING  id,name,email,role,created_at,updated_at`, [name, email, password, role]);
     return result;
 };
+
+const getAllUsersFromDB = async () => {
+    const result = await pool.query(`
+           SELECT id,name,email,role,created_at,updated_at FROM users
+            `);
+    return result;
+}
 export const userService = {
-    createUserIntoDB
+    createUserIntoDB,
+    getAllUsersFromDB,
 }
