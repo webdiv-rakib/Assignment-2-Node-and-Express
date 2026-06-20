@@ -33,33 +33,33 @@ initDB();
 // });
 
 // get single user using GET method
-app.get('/api/users/:id', async (req: Request, res: Response) => {
-    const { id } = req.params
-    try {
-        const result = await pool.query(`
-           SELECT id,name,email,role,created_at,updated_at FROM users WHERE id=$1 
-            `, [id]);
-        if (result.rows.length === 0) {
-            res.status(404).json({
-                success: false,
-                message: "User not found",
-                errors: `No user exists with id ${id}`
-            });
-            return;
-        }
-        res.status(200).json({
-            success: true,
-            message: "User retrieved successfully",
-            data: result.rows[0]
-        });
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-            errors: error.message
-        });
-    };
-});
+// app.get('/api/users/:id', async (req: Request, res: Response) => {
+//     const { id } = req.params
+//     try {
+//         const result = await pool.query(`
+//            SELECT id,name,email,role,created_at,updated_at FROM users WHERE id=$1 
+//             `, [id]);
+//         if (result.rows.length === 0) {
+//             res.status(404).json({
+//                 success: false,
+//                 message: "User not found",
+//                 errors: `No user exists with id ${id}`
+//             });
+//             return;
+//         }
+//         res.status(200).json({
+//             success: true,
+//             message: "User retrieved successfully",
+//             data: result.rows[0]
+//         });
+//     } catch (error: any) {
+//         res.status(500).json({
+//             success: false,
+//             message: "Internal Server Error",
+//             errors: error.message
+//         });
+//     };
+// });
 
 // update single user using PUT method
 app.put('/api/users/:id', async (req: Request, res: Response) => {

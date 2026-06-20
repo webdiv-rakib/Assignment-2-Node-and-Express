@@ -43,7 +43,34 @@ const getAllUsers = async (req: Request, res: Response) => {
     };
 }
 
+const getSingleUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const result = await userService.getSingleUserFromDB(id as string);
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: "User not found",
+                errors: `No user exists with id ${id}`
+            });
+            return;
+        }
+        res.status(200).json({
+            success: true,
+            message: "User retrieved successfully",
+            data: result.rows[0]
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    };
+}
+
 export const userControl = {
     createUser,
-    getAllUsers
+    getAllUsers,
+    getSingleUser
 }
