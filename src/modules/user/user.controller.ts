@@ -67,10 +67,47 @@ const getSingleUser = async (req: Request, res: Response) => {
             errors: error.message
         });
     };
+};
+
+const updateUser = async (req: Request, res: Response) => {
+    const { id } = req.params
+    // const { name, email, password, role } = req.body
+    try {
+        const result = await userService.updateUserIntoDB(req.body, id as string)
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: "User not found",
+                errors: `Cannot update. No user exists with id ${id}`
+            });
+            return;
+
+        };
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully",
+            data: result.rows[0]
+        });
+    } catch (error: any) {
+        if (error.code === '23505') {
+            res.status(400).json({
+                success: false,
+                message: "Email already in use",
+                errors: error.message
+            });
+            return;
+        };
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    };
 }
 
 export const userControl = {
     createUser,
     getAllUsers,
-    getSingleUser
+    getSingleUser,
+    updateUser
 }
