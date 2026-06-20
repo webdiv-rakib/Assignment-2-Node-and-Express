@@ -117,7 +117,7 @@ app.put('/api/users/:id', async (req: Request, res: Response) => {
     };
 });
 
-// delete single user using DELETE method
+// delete single user using
 app.delete('/api/users/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
