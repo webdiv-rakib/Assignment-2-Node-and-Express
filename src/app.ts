@@ -1,6 +1,7 @@
 import express, { type Application, type Request, type Response } from "express"
 import config from "./config/config";
 import initDB, { pool } from "./database/database";
+import { userRoute } from "./modules/user/user.route";
 
 const app: Application = express();
 const port = config.port;
@@ -9,17 +10,9 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-initDB();
+app.use('/api/users', userRoute);
 
-// get main server
-app.get('/', (req: Request, res: Response) => {
-    res.status(200).json({
-        success: true,
-        sever: "Assignment Server Running",
-        message: "Assignment-2",
-        author: "webdiv-rakib"
-    });
-});
+initDB();
 
 // get all users using GET method
 app.get('/api/users', async (req: Request, res: Response) => {
@@ -145,34 +138,44 @@ app.delete('/api/users/:id', async (req: Request, res: Response) => {
 })
 
 // create single user using POST method
-app.post('/api/users', async (req: Request, res: Response) => {
-    const body = req.body
-    const { name, email, password, role = 'contributor' } = body
-    try {
-        const result = await pool.query(`
-         INSERT INTO users(name,email,password,role) VALUES ($1,$2,$3,$4)   
-         RETURNING  id,name,email,role,created_at,updated_at`, [name, email, password, role])
+// app.post('/api/users', async (req: Request, res: Response) => {
+//     const body = req.body
+//     const { name, email, password, role = 'contributor' } = body
+//     try {
+//         const result = await pool.query(`
+//          INSERT INTO users(name,email,password,role) VALUES ($1,$2,$3,$4)   
+//          RETURNING  id,name,email,role,created_at,updated_at`, [name, email, password, role])
 
-        res.status(201).json({
-            success: true,
-            message: "User registered successfully",
-            data: result.rows[0]
-        });
-    } catch (error: any) {
-        if (error.code === '23505') {
-            res.status(400).json({
-                success: false,
-                message: "User Already Exists",
-                errors: "Email is already registered"
-            });
-            return;
-        };
-        res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-            errors: error.message
-        });
-    };
-})
+//         res.status(201).json({
+//             success: true,
+//             message: "User registered successfully",
+//             data: result.rows[0]
+//         });
+//     } catch (error: any) {
+//         if (error.code === '23505') {
+//             res.status(400).json({
+//                 success: false,
+//                 message: "User Already Exists",
+//                 errors: "Email is already registered"
+//             });
+//             return;
+//         };
+//         res.status(500).json({
+//             success: false,
+//             message: "Internal Server Error",
+//             errors: error.message
+//         });
+//     };
+// })
+
+// get main server
+app.get('/', (req: Request, res: Response) => {
+    res.status(200).json({
+        success: true,
+        sever: "Assignment Server Running",
+        message: "Assignment-2",
+        author: "webdiv-rakib"
+    });
+});
 
 export default app;
