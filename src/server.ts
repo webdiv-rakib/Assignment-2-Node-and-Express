@@ -1,7 +1,6 @@
 import express, { type Application, type Request, type Response } from "express"
 import config from "./config/config";
-import initDB from "./database/database";
-import pool from "./app";
+import initDB, { pool } from "./database/database";
 
 const app: Application = express();
 const port = config.port;
