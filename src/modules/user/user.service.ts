@@ -1,6 +1,7 @@
 import { pool } from "../../database/database";
+import type { IUser } from "./user.interface";
 
-const createUserIntoDB = async (payload: any) => {
+const createUserIntoDB = async (payload: IUser) => {
     const { name, email, password, role = 'contributor' } = payload
     const result = await pool.query(`
          INSERT INTO users(name,email,password,role) VALUES ($1,$2,$3,$4)   
@@ -22,7 +23,7 @@ const getSingleUserFromDB = async (id: string) => {
     return result;
 };
 
-const updateUserIntoDB = async (payload: any, id: string) => {
+const updateUserIntoDB = async (payload: IUser, id: string) => {
     const { name, email, password, role } = payload
     const result = await pool.query(`
            UPDATE users SET
