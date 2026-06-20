@@ -1,8 +1,16 @@
 import express, { type Application } from "express"
-const app: Application = express()
-const port = 5000
+import config from "./config/config";
+import initDB from "./database/database";
 
-app.use(express.json())
+const app: Application = express()
+const port = config.port
+
+app.use(express.json());
+app.use(express.text());
+app.use(express.urlencoded({ extended: true }));
+
+initDB();
+
 app.get('/', (req, res) => {
     res.status(200).json({
         success: true,
@@ -23,5 +31,5 @@ app.post('/', async (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`The Server is running on: ${port}`)
 })
