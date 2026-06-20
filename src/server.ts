@@ -42,11 +42,12 @@ app.get('/api/users', async (req: Request, res: Response) => {
     };
 });
 
+// get single user using GET method
 app.get('/api/users/:id', async (req: Request, res: Response) => {
     const { id } = req.params
     try {
         const result = await pool.query(`
-           SELECT id,name,role,created_at,updated_at FROM users WHERE id=$1 
+           SELECT id,name,email,role,created_at,updated_at FROM users WHERE id=$1 
             `, [id]);
         if (result.rows.length === 0) {
             res.status(404).json({
@@ -69,6 +70,52 @@ app.get('/api/users/:id', async (req: Request, res: Response) => {
         });
     };
 });
+
+// update single user using PUT method
+app.put('/api/users/:id', async (req: Request, res: Response) => {
+    const { id } = req.params
+    const { name, email, passowrd, role } = req.body
+    try {
+        const result = await pool.query(`
+           UPDATE users SET
+           name=COALESCE($1,name),
+           email=COALESCE($2,email),
+           password=COALESCE($3,password),
+           role=COALESCE($4,role),
+           updated_at = NOW()
+           WHERE id=$5 
+           RETURNING *
+            `, [name, email, passowrd, role, id]);
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: "User not found",
+                errors: `Cannot update. No user exists with id ${id}`
+            });
+            return;
+
+        };
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully",
+            data: result.rows[0]
+        });
+    } catch (error: any) {
+        if (error.code === '23505') {
+            res.status(400).json({
+                success: false,
+                message: "Email already in use",
+                errors: error.message
+            });
+            return;
+        };
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    };
+})
 
 // create single user using POST method
 app.post('/api/users', async (req: Request, res: Response) => {
