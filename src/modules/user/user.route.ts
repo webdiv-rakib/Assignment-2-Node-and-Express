@@ -11,4 +11,6 @@ router.get('/:id', userControl.getSingleUser);
 
 router.put('/:id', userControl.updateUser);
 
+router.delete('/:id', userControl.deleteUser)
+
 export const userRoute = router;
