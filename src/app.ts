@@ -13,6 +13,17 @@ app.use('/api/users', userRoute);
 app.use('/api/issues', issueRoute);
 
 initDB();
+// get main server
+app.get('/', (req: Request, res: Response) => {
+    res.status(200).json({
+        success: true,
+        sever: "Assignment Server Running",
+        message: "Assignment-2",
+        author: "webdiv-rakib"
+    });
+});
+
+export default app;
 
 // =======User Table IN Database==========
 // get all users using GET method
@@ -316,14 +327,3 @@ initDB();
 // });
 
 
-// get main server
-app.get('/', (req: Request, res: Response) => {
-    res.status(200).json({
-        success: true,
-        sever: "Assignment Server Running",
-        message: "Assignment-2",
-        author: "webdiv-rakib"
-    });
-});
-
-export default app;
