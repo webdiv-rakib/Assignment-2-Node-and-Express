@@ -169,7 +169,57 @@ initDB();
 // })
 
 // ==========Issues Table IN Database==========
+// create issues using POST method
+app.post('/api/issues', async (req: Request, res: Response) => {
+    const body = req.body
+    const { title, description, type } = body;
+    const reporter_id = 1
+    try {
+        const result = await pool.query(`
+        INSERT INTO issues (title,description,type,reporter_id) VALUES($1,$2,$3,$4)    
+        RETURNING *
+            `, [title, description, type, reporter_id]);
+        res.status(201).json({
+            success: true,
+            message: "Issue created successfully",
+            data: result.rows[0]
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: "Failed to create issue",
+            errors: error.message
+        });
+    }
+});
 
+// get all issues using GET method
+app.get('/api/issues', async (req: Request, res: Response) => {
+    try {
+        const result = await pool.query(`
+           SELECT * FROM issues 
+            `);
+        if (result.rows.length === 0) {
+            res.status(200).json({
+                success: true,
+                message: "Issues retrieved successfully",
+                data: []
+            });
+            return;
+        }
+        res.status(200).json({
+            success: true,
+            message: "Issues retrieved successfully",
+            data: result.rows
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    }
+})
 
 
 // get main server
