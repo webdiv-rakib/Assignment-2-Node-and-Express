@@ -2,6 +2,7 @@ import express, { type Application, type Request, type Response } from "express"
 import initDB, { pool } from "./database/database";
 import { userRoute } from "./modules/user/user.route";
 import { issueRoute } from "./modules/issue/issue.router";
+import { authRoute } from "./modules/auth/auth.route";
 
 const app: Application = express();
 // middleware
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/users', userRoute);
 app.use('/api/issues', issueRoute);
+app.use('/api/auth', authRoute);
 
 initDB();
 // get main server
@@ -51,7 +53,7 @@ export default app;
 //     const { id } = req.params
 //     try {
 //         const result = await pool.query(`
-//            SELECT id,name,email,role,created_at,updated_at FROM users WHERE id=$1 
+//            SELECT id,name,email,role,created_at,updated_at FROM users WHERE id=$1
 //             `, [id]);
 //         if (result.rows.length === 0) {
 //             res.status(404).json({
@@ -87,7 +89,7 @@ export default app;
 //            password=COALESCE($3,password),
 //            role=COALESCE($4,role),
 //            updated_at = NOW()
-//            WHERE id=$5 
+//            WHERE id=$5
 //            RETURNING *
 //             `, [name, email, passowrd, role, id]);
 //         if (result.rows.length === 0) {
@@ -155,7 +157,7 @@ export default app;
 //     const { name, email, password, role = 'contributor' } = body
 //     try {
 //         const result = await pool.query(`
-//          INSERT INTO users(name,email,password,role) VALUES ($1,$2,$3,$4)   
+//          INSERT INTO users(name,email,password,role) VALUES ($1,$2,$3,$4)
 //          RETURNING  id,name,email,role,created_at,updated_at`, [name, email, password, role])
 
 //         res.status(201).json({
@@ -188,7 +190,7 @@ export default app;
 //     const reporter_id = 1
 //     try {
 //         const result = await pool.query(`
-//         INSERT INTO issues (title,description,type,reporter_id) VALUES($1,$2,$3,$4)    
+//         INSERT INTO issues (title,description,type,reporter_id) VALUES($1,$2,$3,$4)
 //         RETURNING *
 //             `, [title, description, type, reporter_id]);
 //         res.status(201).json({
@@ -209,7 +211,7 @@ export default app;
 // app.get('/api/issues', async (req: Request, res: Response) => {
 //     try {
 //         const result = await pool.query(`
-//            SELECT * FROM issues 
+//            SELECT * FROM issues
 //             `);
 //         if (result.rows.length === 0) {
 //             res.status(200).json({
@@ -238,7 +240,7 @@ export default app;
 //     const { id } = req.params;
 //     try {
 //         const result = await pool.query(`
-//         SELECT * FROM issues WHERE id=$1    
+//         SELECT * FROM issues WHERE id=$1
 //             `, [id]);
 //         if (result.rows.length === 0) {
 //             res.status(404).json({
@@ -303,7 +305,7 @@ export default app;
 //     const { id } = req.params;
 //     try {
 //         const result = await pool.query(`
-//            DELETE FROM issues WHERE id=$1 
+//            DELETE FROM issues WHERE id=$1
 //             `, [id]);
 //         if (result.rowCount === 0) {
 //             res.status(404).json({
