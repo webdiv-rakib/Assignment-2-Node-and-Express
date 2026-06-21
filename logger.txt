@@ -1,0 +1,2 @@
+[6/22/2026, 1:35:20 AM] Method: POST | URL: /api/auth/login
+[6/22/2026, 2:33:32 AM] Method: GET | URL: /api/users
