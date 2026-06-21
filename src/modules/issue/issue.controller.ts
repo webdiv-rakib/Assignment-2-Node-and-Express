@@ -21,6 +21,113 @@ const createIssue = async (req: Request, res: Response) => {
     };
 };
 
+const getAllIssue = async (req: Request, res: Response) => {
+    try {
+        const result = await issueService.getAllIssueFromDB();
+        if (result.rows.length === 0) {
+            res.status(200).json({
+                success: true,
+                message: "Issues retrieved successfully",
+                data: []
+            });
+            return;
+        }
+        res.status(200).json({
+            success: true,
+            message: "Issues retrieved successfully",
+            data: result.rows
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    };
+};
+
+const getSingleIssue = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const result = await issueService.getSingleIssueFromDB(id as string);
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: "Issue not found",
+                errors: `No issue exists with id ${id}`
+            });
+            return;
+        }
+        res.status(200).json({
+            success: true,
+            message: "Issue retrieved successfully",
+            data: result.rows[0]
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    };
+};
+
+const updateIssue = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    // const { title, description, type } = req.body
+    try {
+        const result = await issueService.updateIssueIntoDB(req.body, id as string);
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: "Issue not found",
+                errors: `No issue exists with id ${id}`
+            });
+            return;
+        };
+        res.status(200).json({
+            success: true,
+            message: "Issue updated successfully",
+            data: result.rows[0]
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: "Failed to update issue",
+            errors: error.message
+        });
+    };
+};
+
+const deleteIssue = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const result = await issueService.deleteIssueFromDB(id as string);
+        if (result.rowCount === 0) {
+            res.status(404).json({
+                success: false,
+                message: "Issue not found",
+                errors: `No issue exists with id ${id}`
+            });
+            return;
+        };
+        res.status(200).json({
+            success: true,
+            message: "Issue deleted successfully"
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    };
+};
+
 export const issueControl = {
-    createIssue
+    createIssue,
+    getAllIssue,
+    getSingleIssue,
+    updateIssue,
+    deleteIssue
 }

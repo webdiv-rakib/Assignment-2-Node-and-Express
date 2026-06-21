@@ -10,6 +10,45 @@ const createIssueIntoDB = async (payload: any) => {
     return result;
 };
 
+const getAllIssueFromDB = async () => {
+    const result = await pool.query(`
+           SELECT * FROM issues 
+            `);
+    return result;
+};
+
+const getSingleIssueFromDB = async (id: string) => {
+    const result = await pool.query(`
+        SELECT * FROM issues WHERE id=$1    
+            `, [id]);
+    return result;
+};
+
+const updateIssueIntoDB = async (payload: any, id: string) => {
+    const { title, description, type } = payload;
+    const result = await pool.query(`
+            UPDATE issues SET
+            title = COALESCE($1,title),
+            description=COALESCE($2,description),
+            type = COALESCE($3,type),
+            updated_at = NOW()
+            WHERE id=$4
+            RETURNING *
+            `, [title, description, type, id]);
+    return result;
+};
+
+const deleteIssueFromDB = async (id: string) => {
+    const result = await pool.query(`
+           DELETE FROM issues WHERE id=$1 
+            `, [id]);
+    return result;
+};
+
 export const issueService = {
-    createIssueIntoDB
+    createIssueIntoDB,
+    getAllIssueFromDB,
+    getSingleIssueFromDB,
+    updateIssueIntoDB,
+    deleteIssueFromDB
 }
