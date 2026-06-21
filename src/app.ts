@@ -1,6 +1,7 @@
 import express, { type Application, type Request, type Response } from "express"
 import initDB, { pool } from "./database/database";
 import { userRoute } from "./modules/user/user.route";
+import { issueRoute } from "./modules/issue/issue.router";
 
 const app: Application = express();
 // middleware
@@ -9,11 +10,11 @@ app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/users', userRoute);
+app.use('/api/issues', issueRoute);
 
 initDB();
 
 // =======User Table IN Database==========
-
 // get all users using GET method
 // app.get('/api/users', async (req: Request, res: Response) => {
 //     try {
@@ -170,28 +171,28 @@ initDB();
 
 // ==========Issues Table IN Database==========
 // create issues using POST method
-app.post('/api/issues', async (req: Request, res: Response) => {
-    const body = req.body
-    const { title, description, type } = body;
-    const reporter_id = 1
-    try {
-        const result = await pool.query(`
-        INSERT INTO issues (title,description,type,reporter_id) VALUES($1,$2,$3,$4)    
-        RETURNING *
-            `, [title, description, type, reporter_id]);
-        res.status(201).json({
-            success: true,
-            message: "Issue created successfully",
-            data: result.rows[0]
-        });
-    } catch (error: any) {
-        res.status(400).json({
-            success: false,
-            message: "Failed to create issue",
-            errors: error.message
-        });
-    }
-});
+// app.post('/api/issues', async (req: Request, res: Response) => {
+//     const body = req.body
+//     const { title, description, type } = body;
+//     const reporter_id = 1
+//     try {
+//         const result = await pool.query(`
+//         INSERT INTO issues (title,description,type,reporter_id) VALUES($1,$2,$3,$4)    
+//         RETURNING *
+//             `, [title, description, type, reporter_id]);
+//         res.status(201).json({
+//             success: true,
+//             message: "Issue created successfully",
+//             data: result.rows[0]
+//         });
+//     } catch (error: any) {
+//         res.status(400).json({
+//             success: false,
+//             message: "Failed to create issue",
+//             errors: error.message
+//         });
+//     }
+// });
 
 // get all issues using GET method
 app.get('/api/issues', async (req: Request, res: Response) => {
