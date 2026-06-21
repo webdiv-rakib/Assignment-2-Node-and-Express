@@ -248,8 +248,43 @@ app.get('/api/issues/:id', async (req: Request, res: Response) => {
             errors: error.message
         });
     }
-})
+});
 
+// update issue using PUT method
+app.patch('/api/issues/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { title, description, type } = req.body
+    try {
+        const result = await pool.query(`
+            UPDATE issues SET
+            title = COALESCE($1,title),
+            description=COALESCE($2,description),
+            type = COALESCE($3,type),
+            updated_at = NOW()
+            WHERE id=$4
+            RETURNING *
+            `, [title, description, type, id]);
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: "Issue not found",
+                errors: `No issue exists with id ${id}`
+            });
+            return;
+        }
+        res.status(200).json({
+            success: true,
+            message: "Issue updated successfully",
+            data: result.rows[0]
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: "Failed to update issue",
+            errors: error.message
+        });
+    }
+})
 
 // get main server
 app.get('/', (req: Request, res: Response) => {
