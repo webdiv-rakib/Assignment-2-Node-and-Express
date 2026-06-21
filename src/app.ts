@@ -219,6 +219,35 @@ app.get('/api/issues', async (req: Request, res: Response) => {
             errors: error.message
         });
     }
+});
+
+// get single issue using GET method
+app.get('/api/issues/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query(`
+        SELECT * FROM issues WHERE id=$1    
+            `, [id]);
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: "Issue not found",
+                errors: `No issue exists with id ${id}`
+            });
+            return;
+        }
+        res.status(200).json({
+            success: true,
+            message: "Issue retrieved successfully",
+            data: result.rows[0]
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    }
 })
 
 
