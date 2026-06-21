@@ -250,7 +250,7 @@ app.get('/api/issues/:id', async (req: Request, res: Response) => {
     }
 });
 
-// update issue using PUT method
+// update issue using PATCH method
 app.patch('/api/issues/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     const { title, description, type } = req.body
@@ -284,7 +284,36 @@ app.patch('/api/issues/:id', async (req: Request, res: Response) => {
             errors: error.message
         });
     }
-})
+});
+
+// delete issue using DELETE method
+app.delete('/api/issues/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query(`
+           DELETE FROM issues WHERE id=$1 
+            `, [id]);
+        if (result.rowCount === 0) {
+            res.status(404).json({
+                success: false,
+                message: "Issue not found",
+                errors: `No issue exists with id ${id}`
+            });
+            return;
+        };
+        res.status(200).json({
+            success: true,
+            message: "Issue deleted successfully"
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            errors: error.message
+        });
+    }
+});
+
 
 // get main server
 app.get('/', (req: Request, res: Response) => {
