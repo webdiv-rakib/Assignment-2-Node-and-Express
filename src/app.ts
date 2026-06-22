@@ -1,4 +1,4 @@
-import express, { type Application, type Request, type Response } from "express"
+import express, { type Application, type NextFunction, type Request, type Response } from "express"
 import initDB, { pool } from "./database/database";
 import { userRoute } from "./modules/user/user.route";
 import { issueRoute } from "./modules/issue/issue.router";
@@ -26,6 +26,7 @@ app.get('/', (req: Request, res: Response) => {
         author: "webdiv-rakib"
     });
 });
+
 
 export default app;
 
