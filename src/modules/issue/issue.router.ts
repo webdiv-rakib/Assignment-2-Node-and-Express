@@ -6,7 +6,7 @@ import { USER_ROLE } from "../../types";
 const router = Router();
 router.post('/', auth(USER_ROLE.contributor), issueControl.createIssue);
 
-router.get('/', issueControl.getAllIssue);
+router.get('/', auth(), issueControl.getAllIssue);
 
 router.get('/:id', issueControl.getSingleIssue);
 
