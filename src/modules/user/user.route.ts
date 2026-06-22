@@ -1,7 +1,5 @@
 import { Router, type NextFunction, type Request, type Response } from "express";
 import { userControl } from "./user.controller";
-import auth from "../../middleware/auth";
-import { USER_ROLE } from "../../types";
 
 const router = Router();
 

@@ -40,6 +40,7 @@ const auth = (...roles: ROLES[]) => {
                     success: false,
                     message: 'Forbidden!, This role has no access',
                 });
+                return;
             }
             req.user = decoded;
             next();
