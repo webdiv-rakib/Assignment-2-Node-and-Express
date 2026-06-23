@@ -2,6 +2,16 @@ import bcrypt from "bcryptjs";
 import { pool } from "../../database/database";
 import jwt from "jsonwebtoken"
 import config from "../../config/config";
+import type { IUser } from "../user/user.interface";
+
+const signUpUserIntoDB = async (payload: IUser) => {
+    const { name, email, password, role = 'contributor' } = payload;
+    const hashPassword = await bcrypt.hash(password, 10);
+    const result = await pool.query(`
+         INSERT INTO users(name,email,password,role) VALUES ($1,$2,$3,$4)   
+         RETURNING  id,name,email,role,created_at,updated_at`, [name, email, hashPassword, role]);
+    return result;
+};
 
 const loginUserIntoDB = async (payload: { email: string, password: string }) => {
     const { email, password } = payload;
@@ -37,5 +47,6 @@ const loginUserIntoDB = async (payload: { email: string, password: string }) => 
     };
 };
 export const authService = {
-    loginUserIntoDB
+    loginUserIntoDB,
+    signUpUserIntoDB
 };
