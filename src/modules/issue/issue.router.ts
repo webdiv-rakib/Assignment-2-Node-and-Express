@@ -4,13 +4,13 @@ import auth from "../../middleware/auth";
 import { USER_ROLE } from "../../types";
 
 const router = Router();
-router.post('/', auth(USER_ROLE.contributor), issueControl.createIssue);
+router.post('/', auth(USER_ROLE.contributor,USER_ROLE.maintainer), issueControl.createIssue);
 
 router.get('/', auth(), issueControl.getAllIssue);
 
 router.get('/:id', issueControl.getSingleIssue);
 
-router.patch('/:id', auth(USER_ROLE.maintainer), issueControl.updateIssue);
+router.patch('/:id', auth(USER_ROLE.maintainer,USER_ROLE.contributor), issueControl.updateIssue);
 
 router.delete('/:id', auth(USER_ROLE.maintainer), issueControl.deleteIssue);
 

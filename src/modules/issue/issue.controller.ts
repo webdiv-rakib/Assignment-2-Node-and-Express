@@ -1,16 +1,21 @@
 import type { Request, Response } from "express";
 import { issueService } from "./issue.service";
 
-const createIssue = async (req: Request, res: Response) => {
+const createIssue = async (req: Request, res: Response): Promise<void> => {
     // const body = req.body;
     // const { title, description, type } = body;
     // const reporter_id = 1;
+    const reporter_id = req.user?.id;
     try {
-        const result = await issueService.createIssueIntoDB(req.body);
+        const result = await issueService.createIssueIntoDB(reporter_id,req.body);
+        if (!reporter_id) {
+            res.status(401).json({ success: false, message: "Unauthorized", errors: "User ID missing" });
+            return;
+        }
         res.status(201).json({
             success: true,
             message: "Issue created successfully",
-            data: result.rows[0]
+            data: result
         });
     } catch (error: any) {
         res.status(400).json({
