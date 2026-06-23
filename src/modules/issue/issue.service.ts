@@ -102,18 +102,65 @@ const getSingleIssueFromDB = async (id: string) => {
     };
 };
 
-const updateIssueIntoDB = async (payload: any, id: string) => {
-    const { title, description, type } = payload;
-    const result = await pool.query(`
-            UPDATE issues SET
-            title = COALESCE($1,title),
-            description=COALESCE($2,description),
-            type = COALESCE($3,type),
-            updated_at = NOW()
-            WHERE id=$4
-            RETURNING *
-            `, [title, description, type, id]);
-    return result;
+// const updateIssueIntoDB = async (payload: any, id: string) => {
+//     const { title, description, type } = payload;
+//     const result = await pool.query(`
+//             UPDATE issues SET
+//             title = COALESCE($1,title),
+//             description=COALESCE($2,description),
+//             type = COALESCE($3,type),
+//             updated_at = NOW()
+//             WHERE id=$4
+//             RETURNING *
+//             `, [title, description, type, id]);
+//     return result;
+// };
+const updateIssueIntoDB = async (id: string, user: any, payload: any) => {
+    // 1. Fetch the issue to see who created it
+    const issueResult = await pool.query(`SELECT * FROM issues WHERE id = $1`, [id]);
+    
+    if (issueResult.rows.length === 0) {
+        throw new Error('Not Found');
+    }
+    
+    const issue = issueResult.rows[0];
+
+    // 2. RESOURCE-LEVEL AUTHORIZATION CHECK
+    // If they are a contributor, they must own the issue to update it.
+    if (user.role === 'contributor' && issue.reporter_id !== user.id) {
+        throw new Error('Forbidden Ownership');
+    }
+
+    // 3. Build the dynamic update query
+    // This allows patching just the title, or just the status, etc.
+    const fields: string[] = [];
+    const values: any[] = [];
+    let paramIndex = 1;
+
+    for (const [key, value] of Object.entries(payload)) {
+        fields.push(`${key} = $${paramIndex}`);
+        values.push(value);
+        paramIndex++;
+    }
+
+    // If no valid fields were provided, just return the existing issue
+    if (fields.length === 0) return issue;
+
+    // Automatically update the updated_at timestamp
+    fields.push(`updated_at = NOW()`);
+
+    // Add the ID to the end of the values array for the WHERE clause
+    values.push(id);
+
+    const queryStr = `
+        UPDATE issues 
+        SET ${fields.join(', ')} 
+        WHERE id = $${paramIndex} 
+        RETURNING *
+    `;
+
+    const updateResult = await pool.query(queryStr, values);
+    return updateResult.rows[0];
 };
 
 const deleteIssueFromDB = async (id: string) => {
