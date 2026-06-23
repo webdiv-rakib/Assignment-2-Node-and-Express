@@ -16,8 +16,8 @@ const loginUser = async (req: Request, res: Response) => {
                 message: "Invalid credentials",
                 errors: error.message
             });
-            return; // Stop execution!
-        }
+            return;
+        };
         res.status(500).json({
             success: false,
             message: "Internal Server Error",

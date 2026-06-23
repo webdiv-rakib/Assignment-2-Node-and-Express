@@ -21,7 +21,25 @@ const getSingleIssueFromDB = async (id: string) => {
     const result = await pool.query(`
         SELECT * FROM issues WHERE id=$1    
             `, [id]);
-    return result;
+    if (result.rows.length === 0) {
+        return null;
+    };
+    const issue = result.rows[0];
+    const userResult = await pool.query(`
+       SELECT id,name,role FROM users WHERE id = $1 
+        `, [issue.reporter_id]);
+    const reporter = userResult.rows[0];
+    const { reporter_id, created_at, updated_at, ...issueData } = issue;
+    return {
+        ...issueData,
+        reporter: reporter ? {
+            id: reporter.id,
+            name: reporter.name,
+            role: reporter.role
+        } : null,
+        created_at,
+        updated_at
+    };
 };
 
 const updateIssueIntoDB = async (payload: any, id: string) => {

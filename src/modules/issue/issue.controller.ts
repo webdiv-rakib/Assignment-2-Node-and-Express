@@ -46,11 +46,11 @@ const getAllIssue = async (req: Request, res: Response) => {
     };
 };
 
-const getSingleIssue = async (req: Request, res: Response) => {
+const getSingleIssue = async (req: Request, res: Response):Promise<void> => {
     const { id } = req.params;
     try {
         const result = await issueService.getSingleIssueFromDB(id as string);
-        if (result.rows.length === 0) {
+        if (!result) {
             res.status(404).json({
                 success: false,
                 message: "Issue not found",
@@ -61,7 +61,8 @@ const getSingleIssue = async (req: Request, res: Response) => {
         res.status(200).json({
             success: true,
             message: "Issue retrieved successfully",
-            data: result.rows[0]
+            // FIX 2: Just send 'result' directly instead of 'result.rows[0]'
+            data: result 
         });
     } catch (error: any) {
         res.status(500).json({

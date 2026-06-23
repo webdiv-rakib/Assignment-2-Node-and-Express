@@ -6,7 +6,7 @@ import type { ROLES } from "../types";
 const auth = (...roles: ROLES[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log('This is protected route')
+            // console.log('This is protected route')
             // 1.check if the token exists
             const token = req.headers.authorization;
             if (!token) {
