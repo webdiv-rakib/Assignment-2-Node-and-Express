@@ -21,21 +21,13 @@ const createIssue = async (req: Request, res: Response) => {
     };
 };
 
-const getAllIssue = async (req: Request, res: Response) => {
+const getAllIssue = async (req: Request, res: Response): Promise<void> => {
     try {
-        const result = await issueService.getAllIssueFromDB();
-        if (result.rows.length === 0) {
-            res.status(200).json({
-                success: true,
-                message: "Issues retrieved successfully",
-                data: []
-            });
-            return;
-        }
+        const result = await issueService.getAllIssueFromDB(req.query);
         res.status(200).json({
             success: true,
             message: "Issues retrieved successfully",
-            data: result.rows
+            data: result
         });
     } catch (error: any) {
         res.status(500).json({
@@ -46,7 +38,7 @@ const getAllIssue = async (req: Request, res: Response) => {
     };
 };
 
-const getSingleIssue = async (req: Request, res: Response):Promise<void> => {
+const getSingleIssue = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {
         const result = await issueService.getSingleIssueFromDB(id as string);
@@ -62,7 +54,7 @@ const getSingleIssue = async (req: Request, res: Response):Promise<void> => {
             success: true,
             message: "Issue retrieved successfully",
             // FIX 2: Just send 'result' directly instead of 'result.rows[0]'
-            data: result 
+            data: result
         });
     } catch (error: any) {
         res.status(500).json({
