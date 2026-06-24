@@ -6,7 +6,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
 
     fs.appendFile('logger.txt', log, (error) => {
         if (error) {
-            console.error("❌ Failed to write to logger.txt:", error.message);
+            console.error("Failed to write to logger.txt:", error.message);
         }
     });
     next();

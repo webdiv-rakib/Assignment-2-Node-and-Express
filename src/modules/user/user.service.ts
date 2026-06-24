@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import { pool } from "../../database/database";
 import type { IUser } from "./user.interface";
 

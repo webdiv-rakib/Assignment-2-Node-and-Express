@@ -1,4 +1,4 @@
-import { Router, type NextFunction, type Request, type Response } from "express";
+import { Router } from "express";
 import { userControl } from "./user.controller";
 
 const router = Router();

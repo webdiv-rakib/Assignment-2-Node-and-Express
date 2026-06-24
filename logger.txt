@@ -197,3 +197,4 @@
 [6/24/2026, 4:36:45 PM] Method: PATCH | URL: /api/issues/1
 [6/24/2026, 4:37:16 PM] Method: DELETE | URL: /api/issues/1
 [6/24/2026, 4:37:40 PM] Method: DELETE | URL: /api/issues/1
+[6/24/2026, 7:02:51 PM] Method: GET | URL: /api/issues

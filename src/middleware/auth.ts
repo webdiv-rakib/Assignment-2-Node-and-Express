@@ -3,6 +3,7 @@ import jwt, { type JwtPayload } from "jsonwebtoken"
 import config from "../config/config";
 import { pool } from "../database/database";
 import type { ROLES } from "../types";
+
 const auth = (...roles: ROLES[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
