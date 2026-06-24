@@ -118,17 +118,25 @@ const getSingleIssueFromDB = async (id: string) => {
 const updateIssueIntoDB = async (id: string, user: any, payload: any) => {
     // 1. Fetch the issue to see who created it
     const issueResult = await pool.query(`SELECT * FROM issues WHERE id = $1`, [id]);
-    
+
     if (issueResult.rows.length === 0) {
         throw new Error('Not Found');
     }
-    
+
     const issue = issueResult.rows[0];
 
     // 2. RESOURCE-LEVEL AUTHORIZATION CHECK
     // If they are a contributor, they must own the issue to update it.
-    if (user.role === 'contributor' && issue.reporter_id !== user.id) {
-        throw new Error('Forbidden Ownership');
+    if (user.role === 'contributor') {
+        // Check 1: Do they own the issue?
+        if (issue.reporter_id !== user.id) {
+            throw new Error('Forbidden Ownership');
+        }
+
+        // Check 2: Is the issue still open?
+        if (issue.status !== 'open') {
+            throw new Error('Forbidden Status');
+        }
     }
 
     // 3. Build the dynamic update query
