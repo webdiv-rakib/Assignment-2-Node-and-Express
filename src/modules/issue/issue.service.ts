@@ -1,5 +1,4 @@
 import { pool } from "../../database/database";
-import type { IUser } from "../user/user.interface";
 
 const createIssueIntoDB = async (reporterId: number, payload: any) => {
     const { title, description, type } = payload;
