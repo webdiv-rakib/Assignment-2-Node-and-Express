@@ -198,3 +198,8 @@
 [6/24/2026, 4:37:16 PM] Method: DELETE | URL: /api/issues/1
 [6/24/2026, 4:37:40 PM] Method: DELETE | URL: /api/issues/1
 [6/24/2026, 7:02:51 PM] Method: GET | URL: /api/issues
+[6/25/2026, 2:02:33 AM] Method: GET | URL: /
+[6/25/2026, 2:02:36 AM] Method: GET | URL: /favicon.ico
+[6/25/2026, 2:02:52 AM] Method: GET | URL: /api/issues
+[6/25/2026, 2:03:30 AM] Method: GET | URL: /api/users
+[6/25/2026, 2:03:45 AM] Method: GET | URL: /api/issues

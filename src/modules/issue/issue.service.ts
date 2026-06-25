@@ -1,6 +1,8 @@
 import { pool } from "../../database/database";
+import type { IUser } from "../user/user.interface";
+import type { IIssue, QueryIssue } from "./issue.interface";
 
-const createIssueIntoDB = async (reporterId: number, payload: any) => {
+const createIssueIntoDB = async (reporterId: number, payload: IIssue) => {
     const { title, description, type } = payload;
     const result = await pool.query(`
         INSERT INTO issues (reporter_id,title,description,type) VALUES($1,$2,$3,$4)    
@@ -15,7 +17,7 @@ const createIssueIntoDB = async (reporterId: number, payload: any) => {
 //             `);
 //     return result;
 // };
-const getAllIssueFromDB = async (query: any) => {
+const getAllIssueFromDB = async (query: QueryIssue) => {
     const { sort, type, status } = query;
     let queryStr = `SELECT * FROM issues`;
     const queryParams: any[] = [];
@@ -115,7 +117,7 @@ const getSingleIssueFromDB = async (id: string) => {
 //             `, [title, description, type, id]);
 //     return result;
 // };
-const updateIssueIntoDB = async (id: string, user: any, payload: any) => {
+const updateIssueIntoDB = async (id: string, user: IUser, payload: IIssue) => {
     // 1. Fetch the issue to see who created it
     const issueResult = await pool.query(`SELECT * FROM issues WHERE id = $1`, [id]);
 
