@@ -255,3 +255,4 @@
 [7/1/2026, 4:40:25 AM] Method: POST | URL: /api/issues
 [7/1/2026, 4:40:52 AM] Method: PATCH | URL: /api/issues/3
 [7/1/2026, 5:08:02 AM] Method: POST | URL: /api/auth/signup
+[7/1/2026, 5:17:23 AM] Method: POST | URL: /api/auth/signup

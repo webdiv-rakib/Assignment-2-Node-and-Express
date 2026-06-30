@@ -6,24 +6,26 @@ const signUp = async (req: Request, res: Response) => {
     try {
         const result = await authService.signUpUserIntoDB(req.body);
         sendResponse(res, {
-            statusCode: 201,
             success: true,
+            statusCode: 201,
             message: "User registered successfully",
             data: result.rows[0]
         });
     } catch (error: any) {
         if (error.code === '23505') {
-            res.status(400).json({
+            sendResponse(res, {
                 success: false,
+                statusCode: 400,
                 message: "User Already Exists",
-                errors: "Email is already registered"
+                error: "Email is already registered"
             });
             return;
         };
-        res.status(500).json({
+        sendResponse(res, {
             success: false,
-            message: "Internal Server Error",
-            errors: error.message
+            statusCode: 500,
+            message: "Internal Sever Error",
+            error: error.message
         });
     };
 };
