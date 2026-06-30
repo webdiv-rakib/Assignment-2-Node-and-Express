@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { issueService } from "./issue.service";
+import type { AuthUser, UpdateIssuePayload } from "./issue.interface";
 
 const createIssue = async (req: Request, res: Response): Promise<void> => {
     // const body = req.body;
@@ -73,9 +74,10 @@ const getSingleIssue = async (req: Request, res: Response): Promise<void> => {
 const updateIssue = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     // const { title, description, type } = req.body
-    const user = req.user;
+    const user = req.user as AuthUser;
+    const payload = req.body as UpdateIssuePayload
     try {
-        const result = await issueService.updateIssueIntoDB(id as string, user, req.body);
+        const result = await issueService.updateIssueIntoDB(id as string, user, payload);
         res.status(200).json({
             success: true,
             message: "Issue updated successfully",

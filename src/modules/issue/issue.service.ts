@@ -1,6 +1,7 @@
 import { pool } from "../../database/database";
+import type { AuthUser, IssuePayload, IssueQuery, UpdateIssuePayload } from "./issue.interface";
 
-const createIssueIntoDB = async (reporterId: number, payload: any) => {
+const createIssueIntoDB = async (reporterId: number, payload: IssuePayload) => {
     const { title, description, type } = payload;
     const result = await pool.query(`
         INSERT INTO issues (reporter_id,title,description,type) VALUES($1,$2,$3,$4)    
@@ -15,10 +16,10 @@ const createIssueIntoDB = async (reporterId: number, payload: any) => {
 //             `);
 //     return result;
 // };
-const getAllIssueFromDB = async (query: any) => {
+const getAllIssueFromDB = async (query: IssueQuery) => {
     const { sort, type, status } = query;
     let queryStr = `SELECT * FROM issues`;
-    const queryParams: any[] = [];
+    const queryParams: string[] = [];
     const conditions: string[] = [];
     let paramIndex = 1;
 
@@ -115,7 +116,7 @@ const getSingleIssueFromDB = async (id: string) => {
 //             `, [title, description, type, id]);
 //     return result;
 // };
-const updateIssueIntoDB = async (id: string, user: any, payload: any) => {
+const updateIssueIntoDB = async (id: string, user: AuthUser, payload: UpdateIssuePayload) => {
     // 1. Fetch the issue to see who created it
     const issueResult = await pool.query(`SELECT * FROM issues WHERE id = $1`, [id]);
 
@@ -142,7 +143,7 @@ const updateIssueIntoDB = async (id: string, user: any, payload: any) => {
     // 3. Build the dynamic update query
     // This allows patching just the title, or just the status, etc.
     const fields: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     for (const [key, value] of Object.entries(payload)) {
