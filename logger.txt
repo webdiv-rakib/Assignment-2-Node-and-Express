@@ -251,3 +251,7 @@
 [7/1/2026, 3:33:37 AM] Method: POST | URL: /api/auth/login
 [7/1/2026, 3:33:51 AM] Method: DELETE | URL: /api/issues/1
 [7/1/2026, 4:34:29 AM] Method: GET | URL: /api/issues
+[7/1/2026, 4:40:10 AM] Method: POST | URL: /api/auth/login
+[7/1/2026, 4:40:25 AM] Method: POST | URL: /api/issues
+[7/1/2026, 4:40:52 AM] Method: PATCH | URL: /api/issues/3
+[7/1/2026, 5:08:02 AM] Method: POST | URL: /api/auth/signup
