@@ -256,3 +256,6 @@
 [7/1/2026, 4:40:52 AM] Method: PATCH | URL: /api/issues/3
 [7/1/2026, 5:08:02 AM] Method: POST | URL: /api/auth/signup
 [7/1/2026, 5:17:23 AM] Method: POST | URL: /api/auth/signup
+[7/1/2026, 7:27:21 PM] Method: POST | URL: /api/auth/login
+[7/1/2026, 7:27:29 PM] Method: POST | URL: /api/auth/login
+[7/1/2026, 7:27:42 PM] Method: POST | URL: /api/auth/login

@@ -33,24 +33,27 @@ const signUp = async (req: Request, res: Response) => {
 const loginUser = async (req: Request, res: Response) => {
     try {
         const result = await authService.loginUserIntoDB(req.body);
-        res.status(200).json({
+        sendResponse(res, {
             success: true,
+            statusCode: 200,
             message: "Login Successfull",
             data: result
         });
     } catch (error: any) {
         if (error.message === 'Invalid Credential') {
-            res.status(401).json({
+            sendResponse(res, {
                 success: false,
-                message: "Invalid credentials",
-                errors: error.message
+                statusCode: 401,
+                message: "Invalid Credentials",
+                error: error.message
             });
             return;
         };
-        res.status(500).json({
+        sendResponse(res, {
             success: false,
+            statusCode: 500,
             message: "Internal Server Error",
-            errors: error.message
+            error: error.message
         });
     };
 };
