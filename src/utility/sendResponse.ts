@@ -16,3 +16,13 @@ export const sendResponse = <T>(res: Response, data: ApiResponse<T>) => {
         error: data.error
     });
 };
+
+export const sendServerError = (res: Response, error: unknown) => {
+    const err = error as Error;
+    sendResponse(res, {
+        success: false,
+        statusCode: 500,
+        message: "Internal Server Error",
+        error: err.message
+    });
+};

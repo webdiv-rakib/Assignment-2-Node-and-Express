@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { authService } from "./auth.service";
-import { sendResponse } from "../../utility/sendResponse";
+import { sendResponse, sendServerError } from "../../utility/sendResponse";
 
 const signUp = async (req: Request, res: Response) => {
     try {
@@ -21,12 +21,7 @@ const signUp = async (req: Request, res: Response) => {
             });
             return;
         };
-        sendResponse(res, {
-            success: false,
-            statusCode: 500,
-            message: "Internal Sever Error",
-            error: error.message
-        });
+        sendServerError(res, error)
     };
 };
 
@@ -49,12 +44,7 @@ const loginUser = async (req: Request, res: Response) => {
             });
             return;
         };
-        sendResponse(res, {
-            success: false,
-            statusCode: 500,
-            message: "Internal Server Error",
-            error: error.message
-        });
+        sendServerError(res, error)
     };
 };
 export const authControl = {

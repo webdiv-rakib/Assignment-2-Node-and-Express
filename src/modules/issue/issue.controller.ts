@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { issueService } from "./issue.service";
 import type { AuthUser, UpdateIssuePayload } from "./issue.interface";
-import { sendResponse } from "../../utility/sendResponse";
+import { sendResponse, sendServerError } from "../../utility/sendResponse";
 
 const createIssue = async (req: Request, res: Response): Promise<void> => {
     // const body = req.body;
@@ -46,12 +46,7 @@ const getAllIssue = async (req: Request, res: Response): Promise<void> => {
             data: result
         });
     } catch (error: any) {
-        sendResponse(res, {
-            success: false,
-            statusCode: 500,
-            message: "Internal Server Error",
-            error: error.message
-        });
+        sendServerError(res, error);
     };
 };
 
@@ -75,12 +70,7 @@ const getSingleIssue = async (req: Request, res: Response): Promise<void> => {
             data: result
         });
     } catch (error: any) {
-        sendResponse(res, {
-            success: false,
-            statusCode: 500,
-            message: "Internal Server Error",
-            error: error.message
-        });
+        sendServerError(res, error)
     };
 };
 
@@ -116,12 +106,7 @@ const updateIssue = async (req: Request, res: Response): Promise<void> => {
             });
             return;
         };
-        sendResponse(res, {
-            success: false,
-            statusCode: 500,
-            message: "Internal Server Error",
-            error: error.message
-        });
+        sendServerError(res, error)
     };
 };
 
@@ -144,12 +129,7 @@ const deleteIssue = async (req: Request, res: Response) => {
             message: "Issue Deleted Successfully"
         });
     } catch (error: any) {
-        sendResponse(res, {
-            success: false,
-            statusCode: 500,
-            message: "Internal Server Error",
-            error: error.message
-        });
+        sendServerError(res, error)
     };
 };
 
