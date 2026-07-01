@@ -259,3 +259,13 @@
 [7/1/2026, 7:27:21 PM] Method: POST | URL: /api/auth/login
 [7/1/2026, 7:27:29 PM] Method: POST | URL: /api/auth/login
 [7/1/2026, 7:27:42 PM] Method: POST | URL: /api/auth/login
+[7/1/2026, 7:41:39 PM] Method: POST | URL: /api/issues
+[7/1/2026, 7:43:33 PM] Method: GET | URL: /api/issues
+[7/1/2026, 7:44:26 PM] Method: GET | URL: /api/issues
+[7/1/2026, 7:50:07 PM] Method: GET | URL: /api/issues/5
+[7/1/2026, 7:51:06 PM] Method: GET | URL: /api/issues/5
+[7/1/2026, 7:51:23 PM] Method: GET | URL: /api/issues/5
+[7/1/2026, 7:51:31 PM] Method: GET | URL: /api/issues/5
+[7/1/2026, 7:51:38 PM] Method: GET | URL: /api/issues/1
+[7/1/2026, 7:51:42 PM] Method: GET | URL: /api/issues/2
+[7/1/2026, 7:57:18 PM] Method: PATCH | URL: /api/issues/5
