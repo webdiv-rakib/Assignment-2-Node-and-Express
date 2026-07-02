@@ -1,6 +1,7 @@
 import { Pool } from "pg"
 import config from "../config/config";
 
+// database connection
 export const pool = new Pool({
     connectionString: config.connection_string
 });
@@ -33,7 +34,7 @@ const initDB = async () => {
             updated_at TIMESTAMP DEFAULT NOW()
         )   
             `)
-        console.log("Database Created Successfully");
+        console.log("Database Connected Successfully");
     } catch (error: any) {
         console.error("Database initialization failed:");
         console.error(error.message);
