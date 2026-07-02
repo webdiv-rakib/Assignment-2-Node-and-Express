@@ -40,33 +40,45 @@ A robust RESTful backend service built for managing technical issues and feature
    Start the development server: `npm run dev`
 
 ## 📡 API Endpoints
-Authentication:
-Method:POST     Endpoint: /api/auth/signup
-Method:POST     Endpoint: /api/auth/login
 
-Issues:
-Method:POST     Endpoint: /api/issues
-Method:GET      Endpoint: /api/issues
-Method:GET      Endpoint: /api/issues/:id
-Method:PATCH    Endpoint: /api/issues/:id
-Method:DELETE   Endpoint: /api/issues/:id
+### Authentication (Public)
+| Method   | Endpoint             | Description                                      |
+| :------- | :------------------- | :----------------------------------------------- |
+| `POST`   | `/api/auth/signup`   | Register a new user (`contributor` or `maintainer`) |
+| `POST`   | `/api/auth/login`    | Authenticate user and receive JWT token          |
+
+### Issues
+| Method   | Endpoint             | Description                                      |
+| :------- | :------------------- | :----------------------------------------------- |
+| `POST`   | `/api/issues`        | Create a new issue                               |
+| `GET`    | `/api/issues`        | Retrieve all issues                              |
+| `GET`    | `/api/issues/:id`    | Retrieve a specific issue by ID                  |
+| `PATCH`  | `/api/issues/:id`    | Update an existing issue                         |
+| `DELETE` | `/api/issues/:id`    | Delete an issue                                  |
+
+---
 
 ## 🗄️ Database Schema Summary
-users Table
-id (SERIAL, Primary Key)
-name (VARCHAR)
-email (VARCHAR, Unique)
-password (VARCHAR, Hashed)
-role (VARCHAR: 'contributor' | 'maintainer')
-created_at (TIMESTAMP)
 
-issues Table
-id (SERIAL, Primary Key)
-title (VARCHAR)
-description (TEXT)
-type (VARCHAR: 'bug' | 'feature_request')
-status (VARCHAR: 'open' | 'in_progress' | 'resolved')
-reporter_id (INTEGER, Foreign Key referencing users.id)
-created_at (TIMESTAMP)
-updated_at (TIMESTAMP)
+### `users` Table
+| Column Name  | Data Type & Constraints                  |
+| :----------- | :--------------------------------------- |
+| **id** | `SERIAL` (Primary Key)                   |
+| **name** | `VARCHAR`                                |
+| **email** | `VARCHAR` (Unique)                       |
+| **password** | `VARCHAR` (Hashed)                       |
+| **role** | `VARCHAR` ('contributor', 'maintainer')  |
+| **created_at**| `TIMESTAMP`                              |
+
+### `issues` Table
+| Column Name     | Data Type & Constraints                               |
+| :-------------- | :---------------------------------------------------- |
+| **id** | `SERIAL` (Primary Key)                                |
+| **title** | `VARCHAR`                                             |
+| **description** | `TEXT`                                                |
+| **type** | `VARCHAR` ('bug', 'feature_request')                  |
+| **status** | `VARCHAR` ('open', 'in_progress', 'resolved')         |
+| **reporter_id** | `INTEGER` (Foreign Key referencing `users.id`)        |
+| **created_at** | `TIMESTAMP`                                           |
+| **updated_at** | `TIMESTAMP`                                           |
 
